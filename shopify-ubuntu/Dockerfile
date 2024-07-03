@@ -2,7 +2,8 @@ FROM ubuntu:latest
 
 # Update and install necessary packages
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y openssh-server nano && \
+    apt-get install -y \
+    openssh-server nano zip curl && \
     mkdir /var/run/sshd
 
 # Set root password
