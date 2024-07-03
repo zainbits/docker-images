@@ -1,0 +1,13 @@
+services:
+  shopify-practice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: shopify-practice
+    ports:
+      - "3022:22"
+      - "5000:5000"
+      - "3443:443"
+    container_name: shopify-practice
+    stdin_open: true
+    tty: true
