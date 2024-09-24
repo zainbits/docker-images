@@ -1,0 +1,12 @@
+services:
+  shopify-cli:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: shopify-cli
+    volumes:
+      - ${YOUR_PROJECT_DIRECTORY_AT_HOST}:/work
+    ports:
+      - "9292:9292"
+    tty: true
+    stdin_open: true
