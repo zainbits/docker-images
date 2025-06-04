@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab-server
+    restart: unless-stopped
+    hostname: 'gitlab.local'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.local'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        # Reduce memory usage for local development
+        puma['worker_processes'] = 2
+        sidekiq['max_concurrency'] = 10
+        prometheus_monitoring['enable'] = false
+        # Enable container registry (optional)
+        registry_external_url 'http://gitlab.local:5050'
+        gitlab_rails['registry_enabled'] = true
+        # Backup settings
+        gitlab_rails['backup_keep_time'] = 604800
+        gitlab_rails['backup_path'] = '/var/opt/gitlab/backups'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '2222:22'
+      - '5050:5050'  # Container registry port
+    volumes:
+      - '$HOME/gitlab_docker/config:/etc/gitlab'
+      - '$HOME/gitlab_docker/logs:/var/log/gitlab'
+      - '$HOME/gitlab_docker/data:/var/opt/gitlab'
+    networks:
+      - gitlab-network
+    shm_size: '256m'
+    # Resource limits (adjust based on your needs)
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
+
+networks:
+  gitlab-network:
+    driver: bridge
