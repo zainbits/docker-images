@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    ports:
+      - "8096:8096"
+      - "8920:8920" # HTTPS port
+    volumes:
+      - /mnt/hdd/JellyFinDir/config:/config
+      - /mnt/hdd/JellyFinDir/cache:/cache
+      - /mnt/hdd/JellyFinDir/media:/media
+    restart: unless-stopped
+    # Optional: Add user ID and group ID if you have permission issues
+    # user: "1000:1000"
